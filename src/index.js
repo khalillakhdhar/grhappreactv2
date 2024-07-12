@@ -12,6 +12,8 @@ import Effectif from './components/dashboard/Effectif';
 import Profil from './components/dashboard/Profil';
 import Root from './components/menu/root';
 import './index.css';
+import './styles/tailwind.css';
+
 import reportWebVitals from './reportWebVitals';
 const router = createBrowserRouter([
   {
