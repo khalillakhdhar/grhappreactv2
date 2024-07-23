@@ -1,16 +1,52 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Login.css'; // pour ajouter du style
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [form,setForm]=useState(
+    {
+      email:'',
+      password:'',
 
-  const handleLogin = (e) => {
+    }
+  )
+
+  const handleChange = (e) => {
+    //e.preventDefault();
+    // Logic for handling registration
+    setForm(
+      {...form,
+        [e.target.name]:e.target.value
+      }
+    )
+  };
+
+
+  const handleLogin = async (e) => {
     e.preventDefault();
     // Logic for handling login
-    console.log("Username: ", username);
-    console.log("Password: ", password);
+    try
+    {
+      const response= await axios.get("https://662e208ca7dda1fa378c2077.mockapi.io/users")
+      console.log("users",response)
+      const user=response.data.find(user=> user.email===form.email && user.password=== form.password)
+      if(user)
+      {
+        localStorage.setItem("currentUser",JSON.stringify(user))
+        window.location.replace("http://localhost:3000/dashboard/profile")
+      }
+      else
+      {
+        alert("email or password incorrect")
+      }
+
+    }
+    catch(error)
+    {
+      console.error("error of login",error)
+    }
+
   };
 
   return (
@@ -21,9 +57,9 @@ const Login = () => {
           <label htmlFor="username">Nom d'utilisateur</label>
           <input
             type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            name="email"
+            value={form.email}
+            onChange={handleChange}
             required
           />
         </div>
@@ -31,9 +67,9 @@ const Login = () => {
           <label htmlFor="password">Mot de passe</label>
           <input
             type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            name="password"
+            value={form.password}
+            onChange={handleChange}
             required
           />
         </div>

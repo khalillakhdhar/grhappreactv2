@@ -1,35 +1,52 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const Subscribe = () => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [address, setAddress] = useState('');
+  const [form,setForm]=useState(
+    {
+      firstName:'',
+      lastName:'',
+      email:'',
+      password:'',
+      address:''
+    }
+  )
 
-  const handleRegister = (e) => {
-    e.preventDefault();
+  const handleChange = (e) => {
+    //e.preventDefault();
     // Logic for handling registration
-    console.log("First Name: ", firstName);
-    console.log("Last Name: ", lastName);
-    console.log("Email: ", email);
-    console.log("Password: ", password);
-    console.log("Address: ", address);
+    setForm(
+      {...form,
+        [e.target.name]:e.target.value
+      }
+    )
   };
-
+  const handleSubmit= async(e)=> {
+    e.preventDefault();
+    try
+    {
+      await axios.post("https://662e208ca7dda1fa378c2077.mockapi.io/users",form)
+      alert("subscribed successfully")
+    }
+    catch(error)
+    {
+      console.error("error during registration",error)
+    }
+  }
   return (
     <div className="container mt-5">
       <h2>Inscription</h2>
-      <form onSubmit={handleRegister}>
+      <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="firstName">Prénom</label>
           <input
             type="text"
             className="form-control"
-            id="firstName"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
+            name="firstName"
+            
+            value={form.firstName}
+            onChange={handleChange}
             required
           />
         </div>
@@ -38,9 +55,9 @@ const Subscribe = () => {
           <input
             type="text"
             className="form-control"
-            id="lastName"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
+            name="lastName"
+            value={form.lastName}
+            onChange={handleChange}
             required
           />
         </div>
@@ -49,9 +66,9 @@ const Subscribe = () => {
           <input
             type="email"
             className="form-control"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            name="email"
+            value={form.email}
+            onChange={handleChange}
             required
           />
         </div>
@@ -60,9 +77,9 @@ const Subscribe = () => {
           <input
             type="password"
             className="form-control"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            name="password"
+            value={form.password}
+            onChange={handleChange}
             required
           />
         </div>
@@ -71,9 +88,9 @@ const Subscribe = () => {
           <input
             type="text"
             className="form-control"
-            id="address"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
+            name="address"
+            value={form.address}
+            onChange={handleChange}
             required
           />
         </div>
